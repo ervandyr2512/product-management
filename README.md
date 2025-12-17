@@ -304,6 +304,7 @@ Setelah run seeder, gunakan:
 
 Dokumentasi lengkap tersedia di folder `docs/`:
 
+### Core Documentation
 1. **[00-OVERVIEW.md](docs/00-OVERVIEW.md)** - Overview aplikasi, arsitektur, dan tech stack
 2. **[01-INSTALLATION.md](docs/01-INSTALLATION.md)** - Panduan instalasi step-by-step
 3. **[02-FEATURES.md](docs/02-FEATURES.md)** - Detail semua fitur aplikasi
@@ -315,6 +316,24 @@ Dokumentasi lengkap tersedia di folder `docs/`:
 9. **[08-ARTICLE-SYSTEM.md](docs/08-ARTICLE-SYSTEM.md)** - Sistem artikel/blog kesehatan mental
 10. **[09-API-ENDPOINTS.md](docs/09-API-ENDPOINTS.md)** - Referensi lengkap semua routes dan endpoints
 11. **[10-TESTING.md](docs/10-TESTING.md)** - Panduan testing dengan PHPUnit
+
+### Development Guides
+12. **[11-CHANGELOG.md](docs/11-CHANGELOG.md)** - 📝 **Development progress dan changelog lengkap**
+13. **[12-TROUBLESHOOTING.md](docs/12-TROUBLESHOOTING.md)** - 🔧 **Troubleshooting guide untuk common issues**
+14. **[13-QUICK-REFERENCE.md](docs/13-QUICK-REFERENCE.md)** - ⚡ **Quick reference untuk developer**
+
+### Recommended Reading Order
+
+**Untuk Developer Baru:**
+1. Start: [00-OVERVIEW.md](docs/00-OVERVIEW.md) - Pahami arsitektur
+2. Setup: [01-INSTALLATION.md](docs/01-INSTALLATION.md) - Install aplikasi
+3. Quick Start: [13-QUICK-REFERENCE.md](docs/13-QUICK-REFERENCE.md) - Command yang sering dipakai
+4. Deep Dive: Baca dokumentasi lainnya sesuai kebutuhan
+
+**Untuk Troubleshooting:**
+1. [12-TROUBLESHOOTING.md](docs/12-TROUBLESHOOTING.md) - Solusi untuk masalah umum
+2. [11-CHANGELOG.md](docs/11-CHANGELOG.md) - Lihat perubahan terbaru
+3. [13-QUICK-REFERENCE.md](docs/13-QUICK-REFERENCE.md) - Emergency fixes
 
 ## License
 

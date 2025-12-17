@@ -144,10 +144,8 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Notifications\Channels\WhatsappChannel;
 
-class AppointmentConfirmed extends Notification implements ShouldQueue
+class AppointmentConfirmed extends Notification // Synchronous for immediate sending
 {
-    use Queueable;
-
     public $appointment;
 
     public function __construct(Appointment $appointment)
@@ -157,32 +155,30 @@ class AppointmentConfirmed extends Notification implements ShouldQueue
 
     public function via($notifiable)
     {
-        return ['mail', WhatsappChannel::class];
+        return ['mail', 'whatsapp'];
     }
 
-    public function toMail($notifiable)
+    public function toMail($notifiable): MailMessage
     {
         $appointment = $this->appointment;
-        $schedule = $appointment->schedule;
-        $professional = $appointment->professional;
 
         return (new MailMessage)
-            ->subject('Appointment Confirmed - Teman Bicara')
+            ->subject('Konfirmasi Pembayaran - Janji Temu Teman Bicara')
             ->greeting('Halo ' . $notifiable->name . '!')
-            ->line('Appointment Anda dengan ' . $professional->user->name . ' telah dikonfirmasi.')
+            ->line('Terima kasih telah membuat janji temu di temanbicara.com.')
+            ->line('Pembayaran Anda telah terkonfirmasi dengan nominal **Rp ' . number_format($appointment->price, 0, ',', '.') . '**')
             ->line('')
-            ->line('**Detail Appointment:**')
-            ->line('👨‍⚕️ Professional: ' . $professional->user->name)
-            ->line('🏥 Spesialisasi: ' . ucfirst($professional->specialization))
-            ->line('📅 Tanggal: ' . $schedule->date->format('d M Y'))
-            ->line('🕐 Waktu: ' . $schedule->start_time . ' - ' . $schedule->end_time)
-            ->line('⏱️ Durasi: ' . $appointment->duration . ' menit')
-            ->line('💰 Harga: Rp ' . number_format($appointment->price, 0, ',', '.'))
+            ->line('**Berikut adalah detail janji temu Anda:**')
+            ->line('👤 **Professional:** ' . $appointment->professional->user->name)
+            ->line('📅 **Tanggal:** ' . \Carbon\Carbon::parse($appointment->appointment_date)->format('d F Y'))
+            ->line('🕐 **Jam:** ' . substr($appointment->start_time, 0, 5) . ' - ' . substr($appointment->end_time, 0, 5) . ' WIB')
+            ->line('⏱️ **Durasi:** ' . $appointment->duration . ' menit')
+            ->line('💰 **Nominal Pembayaran:** Rp ' . number_format($appointment->price, 0, ',', '.'))
             ->line('')
-            ->action('Join Video Call', $appointment->video_link)
-            ->line('Link video call akan aktif pada waktu appointment.')
+            ->line('**Link Video Chat:**')
+            ->action('Join Video Chat', $appointment->video_link)
             ->line('')
-            ->line('Terima kasih telah menggunakan Teman Bicara!');
+            ->line('Terima kasih telah mempercayai Teman Bicara untuk kesehatan mental Anda! 💚');
     }
 
     public function toWhatsapp($notifiable)
@@ -461,20 +457,43 @@ class WhatsappChannel
 
 ### Phone Number Format
 
-**Input Examples:**
-- `0812-3456-7890`
-- `+62 812 3456 7890`
-- `62812 3456 7890`
-- `812-3456-7890`
+**Storage Format (Database):**
+Phone numbers are stored in international format with country code:
+- ✅ `6281234567890` (Indonesia)
+- ✅ `601234567890` (Malaysia)
+- ✅ `6581234567` (Singapore)
 
-**Output (WhatsApp ID):**
+**User Input:**
+Users select country code from dropdown and enter number without leading zero:
+- Country dropdown: 🇮🇩 +62, 🇲🇾 +60, 🇸🇬 +65, etc.
+- Phone input: `81234567890` (without 0 or country code)
+- System combines: `62` + `81234567890` = `6281234567890`
+
+**WhatsApp Format:**
+For sending via WAHA API, append `@c.us`:
 - `6281234567890@c.us`
 
-**Logic:**
-1. Remove all non-numeric characters
-2. If starts with `0`, replace with `62`
-3. If doesn't start with `62`, prepend `62`
-4. Append `@c.us` for WhatsApp ID
+**Registration Form:**
+See [resources/views/auth/register.blade.php](../resources/views/auth/register.blade.php):
+```blade
+<select name="country_code">
+    <option value="62">🇮🇩 +62</option>
+    <option value="60">🇲🇾 +60</option>
+    <option value="65">🇸🇬 +65</option>
+    <!-- More countries... -->
+</select>
+<input type="text" name="phone" placeholder="81234567890">
+```
+
+**Profile Update:**
+Smart parsing for existing numbers in [resources/views/profile/partials/update-profile-information-form.blade.php](../resources/views/profile/partials/update-profile-information-form.blade.php):
+```php
+// Automatically separates country code from existing phone
+if (str_starts_with($currentPhone, '62')) {
+    $countryCode = '62';
+    $phoneNumber = substr($currentPhone, 2); // 81234567890
+}
+```
 
 ## Queue System
 
