@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: teman-bicara-mysql
+    restart: unless-stopped
+    ports:
+      - "3305:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydatabase
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - teman-bicara-network
+
+  # Mailhog for Email Testing
+  mailhog:
+    image: mailhog/mailhog
+    container_name: teman-bicara-mailhog
+    restart: unless-stopped
+    ports:
+      - "1025:1025"  # SMTP port
+      - "8025:8025"  # Web UI port
+    networks:
+      - teman-bicara-network
+
+  # WAHA - WhatsApp HTTP API
+  waha:
+    image: devlikeapro/waha
+    platform: linux/amd64
+    container_name: teman-bicara-waha
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      WHATSAPP_API_KEY: asdf
+      WAHA_DASHBOARD_ENABLED: true
+      WAHA_DASHBOARD_USERNAME: admin
+      WAHA_DASHBOARD_PASSWORD: asdf
+    volumes:
+      - waha_data:/app/.waha
+    networks:
+      - teman-bicara-network
+
+volumes:
+  mysql_data:
+    driver: local
+  waha_data:
+    driver: local
+
+networks:
+  teman-bicara-network:
+    driver: bridge
