@@ -1,0 +1,44 @@
+name: Test Hostinger Connection
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test SSH Connection
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Test SSH Connection
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "✅ SSH Connection successful!"
+            echo "Current directory: $(pwd)"
+            echo "Home directory: $HOME"
+            echo "User: $(whoami)"
+            echo ""
+            echo "Checking for application directory..."
+            if [ -d "${{ secrets.DEPLOY_PATH }}" ]; then
+              echo "✅ Deploy path exists: ${{ secrets.DEPLOY_PATH }}"
+              cd ${{ secrets.DEPLOY_PATH }}
+              echo "Contents:"
+              ls -la
+            else
+              echo "❌ Deploy path does NOT exist: ${{ secrets.DEPLOY_PATH }}"
+              echo "Available directories in home:"
+              ls -la $HOME
+            fi
+            echo ""
+            echo "Checking PHP version..."
+            php -v || echo "PHP not found"
+            echo ""
+            echo "Checking Composer..."
+            composer --version || echo "Composer not found"
+            echo ""
+            echo "Checking Git..."
+            git --version || echo "Git not found"
