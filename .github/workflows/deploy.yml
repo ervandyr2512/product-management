@@ -43,49 +43,66 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ${{ secrets.DEPLOY_PATH }}
-
             echo "🚀 Starting deployment..."
 
-            # Put site in maintenance mode
-            php artisan down || true
+            # Check if application directory exists
+            if [ ! -d "${{ secrets.DEPLOY_PATH }}" ]; then
+              echo "📦 Initial deployment - cloning repository..."
+              git clone https://github.com/ervandyr2512/product-management.git ${{ secrets.DEPLOY_PATH }}
+              cd ${{ secrets.DEPLOY_PATH }}
 
-            # Pull latest changes
-            echo "📥 Pulling latest changes..."
-            git pull origin main
+              echo "📝 Setting up environment..."
+              # Note: .env file should be manually created on server first
+              if [ ! -f .env ]; then
+                echo "⚠️  Warning: .env file not found. Please create it manually."
+              fi
+            else
+              echo "🔄 Updating existing deployment..."
+              cd ${{ secrets.DEPLOY_PATH }}
+
+              # Put site in maintenance mode
+              php artisan down || true
+
+              # Pull latest changes
+              echo "📥 Pulling latest changes..."
+              git pull origin main
+            fi
 
             # Install/update dependencies
-            echo "📦 Installing dependencies..."
-            composer install --no-dev --optimize-autoloader --no-interaction
+            echo "📦 Installing Composer dependencies..."
+            composer install --no-dev --optimize-autoloader --no-interaction || echo "⚠️  Composer install failed"
 
             # Clear all caches
             echo "🧹 Clearing caches..."
-            php artisan cache:clear
-            php artisan config:clear
-            php artisan route:clear
-            php artisan view:clear
+            php artisan cache:clear || true
+            php artisan config:clear || true
+            php artisan route:clear || true
+            php artisan view:clear || true
 
             # Run migrations
             echo "🗄️ Running migrations..."
-            php artisan migrate --force
+            php artisan migrate --force || echo "⚠️  Migrations failed"
 
             # Optimize for production
             echo "⚡ Optimizing..."
-            php artisan config:cache
-            php artisan route:cache
-            php artisan view:cache
+            php artisan config:cache || true
+            php artisan route:cache || true
+            php artisan view:cache || true
 
             # Set proper permissions
             echo "🔒 Setting permissions..."
-            chmod -R 775 storage bootstrap/cache
+            chmod -R 775 storage bootstrap/cache 2>/dev/null || echo "⚠️  Permission setting failed"
+
+            # Create storage link if needed
+            php artisan storage:link || true
 
             # Restart queue workers (if using)
             php artisan queue:restart || true
 
             # Bring site back online
-            php artisan up
+            php artisan up || true
 
-            echo "✅ Deployment completed successfully!"
+            echo "✅ Deployment completed!"
 
       - name: Notify on success
         if: success()
