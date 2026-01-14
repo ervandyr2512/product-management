@@ -61,6 +61,24 @@ class ProfessionalController extends Controller
         $professional->load('user', 'schedules');
         $availableSchedules = $professional->availableSchedules()->get();
 
-        return view('professionals.show', compact('professional', 'availableSchedules'));
+        // Check if current user has favorited this professional
+        $isFavorited = false;
+        if (auth()->check()) {
+            $isFavorited = auth()->user()->favoriteProfessionals()
+                ->where('professional_id', $professional->id)
+                ->exists();
+        }
+
+        // Get reviews with user data
+        $reviews = $professional->reviews()
+            ->with('user')
+            ->latest()
+            ->get();
+
+        // Calculate average rating
+        $averageRating = $reviews->avg('rating');
+        $totalReviews = $reviews->count();
+
+        return view('professionals.show', compact('professional', 'availableSchedules', 'isFavorited', 'reviews', 'averageRating', 'totalReviews'));
     }
 }

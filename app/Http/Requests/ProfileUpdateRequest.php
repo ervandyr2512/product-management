@@ -27,6 +27,7 @@ class ProfileUpdateRequest extends FormRequest
             ],
             'country_code' => ['required', 'string', 'in:62,60,65,66,84,63,1,44'],
             'phone' => ['required', 'string', 'max:20', 'regex:/^[0-9]+$/'],
+            'profile_photo' => ['nullable', 'image', 'mimes:jpeg,jpg,png,gif', 'max:2048'],
         ];
     }
 

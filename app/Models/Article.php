@@ -36,14 +36,14 @@ class Article extends Model
     public function getCategoryLabelAttribute()
     {
         return match($this->category) {
-            'mental_health' => 'Kesehatan Mental',
-            'anxiety' => 'Kecemasan',
-            'depression' => 'Depresi',
-            'stress' => 'Stress',
-            'self_care' => 'Perawatan Diri',
-            'therapy' => 'Terapi',
-            'other' => 'Lainnya',
-            default => 'Lainnya',
+            'mental_health' => __('messages.category_mental_health'),
+            'anxiety' => __('messages.category_anxiety'),
+            'depression' => __('messages.category_depression'),
+            'stress' => __('messages.category_stress'),
+            'self_care' => __('messages.category_self_care'),
+            'therapy' => __('messages.category_therapy'),
+            'other' => __('messages.category_other'),
+            default => __('messages.category_other'),
         };
     }
 }

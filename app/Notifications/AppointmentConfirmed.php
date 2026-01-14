@@ -50,8 +50,9 @@ class AppointmentConfirmed extends Notification
             ->line('⏱️ Durasi: ' . $this->appointment->duration . ' menit')
             ->line('💰 Nominal Pembayaran: Rp ' . number_format($this->appointment->price, 0, ',', '.'))
             ->line('')
-            ->action('Join Video Chat', $this->appointment->video_chat_link)
-            ->line('Link Video Chat: ' . $this->appointment->video_chat_link)
+            ->action('Lihat Detail Janji Temu', route('appointments.show', $this->appointment->id))
+            ->line('')
+            ->line('💡 **Penting:** Anda dapat bergabung ke video konsultasi 10 menit sebelum jadwal dimulai.')
             ->line('')
             ->line('Terima kasih telah mempercayai Teman Bicara untuk kesehatan mental Anda!');
     }
@@ -61,6 +62,8 @@ class AppointmentConfirmed extends Notification
      */
     public function toWhatsapp(object $notifiable)
     {
+        $appointmentUrl = route('appointments.show', $this->appointment->id);
+
         $message = "*Konfirmasi Pembayaran - Teman Bicara*\n\n"
             . "Halo {$notifiable->name}!\n\n"
             . "Terima kasih telah membuat janji temu di temanbicara.com.\n\n"
@@ -71,7 +74,9 @@ class AppointmentConfirmed extends Notification
             . "🕐 Jam: " . date('H:i', strtotime($this->appointment->start_time)) . " - " . date('H:i', strtotime($this->appointment->end_time)) . " WIB\n"
             . "⏱️ Durasi: {$this->appointment->duration} menit\n"
             . "💰 Nominal Pembayaran: Rp " . number_format($this->appointment->price, 0, ',', '.') . "\n\n"
-            . "🎥 Link Video Chat:\n{$this->appointment->video_chat_link}\n\n"
+            . "💡 *Penting:*\n"
+            . "Anda dapat bergabung ke video konsultasi 10 menit sebelum jadwal dimulai.\n\n"
+            . "🔗 Lihat detail & join video konsultasi:\n{$appointmentUrl}\n\n"
             . "Terima kasih telah mempercayai Teman Bicara untuk kesehatan mental Anda! 💚";
 
         // Phone number should already be in international format (e.g., 6281234567890)

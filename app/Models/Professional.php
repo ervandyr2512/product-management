@@ -52,4 +52,19 @@ class Professional extends Model
     {
         return $this->schedules()->where('is_available', true)->where('date', '>=', now()->toDateString());
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function averageRating()
+    {
+        return $this->reviews()->avg('rating') ?? 0;
+    }
+
+    public function totalReviews()
+    {
+        return $this->reviews()->count();
+    }
 }
