@@ -1,0 +1,97 @@
+name: Deploy to Hostinger
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, xml, ctype, curl, gd, zip, pdo_mysql
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install NPM dependencies
+        run: npm ci
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Deploy to Hostinger
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ${{ secrets.DEPLOY_PATH }}
+
+            echo "🚀 Starting deployment..."
+
+            # Put site in maintenance mode
+            php artisan down || true
+
+            # Pull latest changes
+            echo "📥 Pulling latest changes..."
+            git pull origin main
+
+            # Install/update dependencies
+            echo "📦 Installing dependencies..."
+            composer install --no-dev --optimize-autoloader --no-interaction
+
+            # Clear all caches
+            echo "🧹 Clearing caches..."
+            php artisan cache:clear
+            php artisan config:clear
+            php artisan route:clear
+            php artisan view:clear
+
+            # Run migrations
+            echo "🗄️ Running migrations..."
+            php artisan migrate --force
+
+            # Optimize for production
+            echo "⚡ Optimizing..."
+            php artisan config:cache
+            php artisan route:cache
+            php artisan view:cache
+
+            # Set proper permissions
+            echo "🔒 Setting permissions..."
+            chmod -R 775 storage bootstrap/cache
+
+            # Restart queue workers (if using)
+            php artisan queue:restart || true
+
+            # Bring site back online
+            php artisan up
+
+            echo "✅ Deployment completed successfully!"
+
+      - name: Notify on success
+        if: success()
+        run: echo "🚀 Deployment to production successful!"
+
+      - name: Notify on failure
+        if: failure()
+        run: echo "❌ Deployment failed! Check logs."
