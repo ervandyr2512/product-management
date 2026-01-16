@@ -111,3 +111,46 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 });
 
 require __DIR__.'/auth.php';
+
+// Test Email Route
+Route::get('/test-email-system', function () {
+    try {
+        $config = [
+            'MAIL_MAILER' => config('mail.default'),
+            'MAIL_HOST' => config('mail.mailers.smtp.host'),
+            'MAIL_PORT' => config('mail.mailers.smtp.port'),
+            'MAIL_USERNAME' => config('mail.mailers.smtp.username'),
+            'MAIL_ENCRYPTION' => config('mail.mailers.smtp.encryption'),
+            'MAIL_FROM' => config('mail.from.address'),
+        ];
+
+        echo "<!DOCTYPE html><html><head><title>Email Test</title>";
+        echo "<style>body{font-family:Arial;padding:20px;} h1{color:#4F46E5;} .success{color:green;} .error{color:red;} pre{background:#f3f4f6;padding:15px;border-radius:5px;}</style>";
+        echo "</head><body>";
+        echo "<h1>📧 Email Configuration Test</h1>";
+        echo "<h3>Current Configuration:</h3>";
+        echo "<pre>";
+        print_r($config);
+        echo "</pre>";
+
+        \Illuminate\Support\Facades\Mail::raw('This is a test email from Teman Bicara on Hostinger. If you receive this, your email configuration is working correctly!', function ($message) {
+            $message->to('ervandyrangganata@gmail.com')
+                    ->subject('Test Email - Teman Bicara');
+        });
+
+        echo "<h2 class='success'>✅ Email sent successfully!</h2>";
+        echo "<p>Check your inbox at: <strong>ervandyrangganata@gmail.com</strong></p>";
+        echo "<p><small>Note: Check spam folder if you don't see it in inbox</small></p>";
+        echo "</body></html>";
+
+    } catch (\Exception $e) {
+        echo "<!DOCTYPE html><html><head><title>Email Test Error</title>";
+        echo "<style>body{font-family:Arial;padding:20px;} .error{color:red;} pre{background:#fee;padding:15px;border-radius:5px;}</style>";
+        echo "</head><body>";
+        echo "<h2 class='error'>❌ Error sending email:</h2>";
+        echo "<pre>" . htmlspecialchars($e->getMessage()) . "</pre>";
+        echo "<h3>Full Stack Trace:</h3>";
+        echo "<pre>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
+        echo "</body></html>";
+    }
+});
