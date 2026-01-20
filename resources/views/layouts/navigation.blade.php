@@ -196,6 +196,11 @@
                         Jadwal Saya
                     </x-responsive-nav-link>
                 @endif
+                @if(Auth::user()->isAdmin())
+                    <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.*')">
+                        Admin Panel
+                    </x-responsive-nav-link>
+                @endif
             @endauth
         </div>
 

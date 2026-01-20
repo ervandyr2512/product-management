@@ -156,35 +156,20 @@
                 <!-- Top Navigation Bar -->
                 <header class="bg-white dark:bg-gray-800 shadow-sm z-10">
                     <div class="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
-                        <div class="flex items-center space-x-4">
-                            <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                                </svg>
-                            </button>
+                        <!-- Mobile Menu Button -->
+                        <button @click="sidebarOpen = !sidebarOpen" class="lg:hidden text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                            </svg>
+                        </button>
 
-                            <!-- Website Navigation Links -->
-                            <nav class="hidden md:flex items-center space-x-6">
-                                <a href="{{ route('home') }}" class="text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">
-                                    Home
-                                </a>
-                                <a href="{{ route('professionals.index') }}" class="text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">
-                                    Professionals
-                                </a>
-                                <a href="{{ route('articles.index') }}" class="text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">
-                                    Articles
-                                </a>
-                                <a href="{{ route('about') }}" class="text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">
-                                    About
-                                </a>
-                                <a href="{{ route('contact') }}" class="text-gray-600 dark:text-gray-300 hover:text-purple-600 dark:hover:text-purple-400 transition">
-                                    Contact
-                                </a>
-                            </nav>
+                        <!-- Page Title (visible on desktop, hidden sidebar on mobile) -->
+                        <div class="hidden lg:block">
+                            <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-200">Admin Panel</h2>
                         </div>
 
-                        <div class="flex items-center space-x-4">
-                            <!-- Dark Mode Toggle -->
+                        <!-- Right Side: Dark Mode Toggle -->
+                        <div class="flex items-center space-x-4 ml-auto">
                             <button
                                 @click="
                                     if (document.documentElement.classList.contains('dark')) {
