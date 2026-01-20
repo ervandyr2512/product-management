@@ -3,8 +3,20 @@
         <!-- Page Header -->
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6">
-                <h1 class="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-                <p class="text-gray-600 mt-1">Welcome back, {{ Auth::user()->name }}!</p>
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+                        <p class="text-gray-600 mt-1">Welcome back, {{ Auth::user()->name }}!</p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <a href="{{ route('admin.users.index') }}" class="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition">
+                            👥 Manage Users
+                        </a>
+                        <a href="{{ route('admin.professionals.index') }}" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                            💼 Manage Professionals
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
 

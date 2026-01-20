@@ -17,7 +17,12 @@ class DashboardController extends Controller
         $totalUsers = User::where('role', 'user')->count();
         $totalProfessionals = Professional::count();
         $totalAppointments = Appointment::count();
-        $totalRevenue = Payment::where('status', 'paid')->sum('amount');
+
+        // Calculate revenue from completed appointments only
+        $totalRevenue = Appointment::where('status', 'completed')
+            ->join('schedules', 'appointments.schedule_id', '=', 'schedules.id')
+            ->join('professionals', 'schedules.professional_id', '=', 'professionals.id')
+            ->sum('professionals.price_per_session');
 
         // Recent data
         $recentAppointments = Appointment::with(['user', 'professional.user', 'schedule'])
