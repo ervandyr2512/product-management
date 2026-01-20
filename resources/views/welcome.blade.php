@@ -28,6 +28,30 @@
         }
     </style>
 </head>
+
+<a href="https://wa.me/447778900596?text=Halo%20saya%20ingin%20konsultasi" 
+ target="_blank" 
+ rel="noopener noreferrer"
+ style="
+ position: fixed;
+ bottom: 20px;
+ right: 20px;
+ background-color: #25D366;
+ color: white;
+ border-radius: 50%;
+ width: 60px;
+ height: 60px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 30px;
+ text-decoration: none;
+ z-index: 9999;
+ ">
+ 💬
+</a>
+
+
 <body class="antialiased bg-white dark:bg-gray-900 transition-colors duration-200">
     <!-- Navigation -->
     <nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 fixed w-full top-0 z-50 transition-colors duration-200" x-data="{ open: false }">

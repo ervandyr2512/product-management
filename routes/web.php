@@ -154,3 +154,25 @@ Route::get('/test-email-system', function () {
         echo "</body></html>";
     }
 });
+
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+
+Route::get('/fix-admin-password', function () {
+ // ganti email jika perlu
+ $email = 'admin@temanbicara.id';
+
+ $user = User::where('email', $email)->first();
+
+ if (! $user) {
+ $user = new User;
+ $user->name = 'Super Admin';
+ $user->email = $email;
+ $user->role = 'admin'; // sesuaikan dengan kolom role di tabel Anda
+ }
+
+ $user->password = Hash::make('PasswordBaruYangKuat123!');
+ $user->save();
+
+ return 'OK: password admin di-set ke PasswordBaruYangKuat123!';
+});

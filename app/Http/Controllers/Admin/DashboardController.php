@@ -17,7 +17,7 @@ class DashboardController extends Controller
         $totalUsers = User::where('role', 'user')->count();
         $totalProfessionals = Professional::count();
         $totalAppointments = Appointment::count();
-        $totalRevenue = Payment::where('payment_status', 'paid')->sum('amount');
+        $totalRevenue = Payment::where('status', 'paid')->sum('amount');
 
         // Recent data
         $recentAppointments = Appointment::with(['user', 'professional.user', 'schedule'])
@@ -31,7 +31,7 @@ class DashboardController extends Controller
             ->get();
 
         // Monthly revenue
-        $monthlyRevenue = Payment::where('payment_status', 'paid')
+        $monthlyRevenue = Payment::where('status', 'paid')
             ->whereYear('created_at', now()->year)
             ->selectRaw('MONTH(created_at) as month, SUM(amount) as total')
             ->groupBy('month')
