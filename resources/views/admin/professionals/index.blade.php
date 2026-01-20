@@ -97,9 +97,17 @@
                                         </button>
                                     </form>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <a href="{{ route('admin.professionals.show', $professional) }}" class="text-purple-600 hover:text-purple-900 mr-3">View</a>
-                                    <a href="{{ route('admin.professionals.edit', $professional) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-3">
+                                    <a href="{{ route('admin.professionals.show', $professional) }}" class="text-purple-600 hover:text-purple-900">View</a>
+                                    <a href="{{ route('admin.professionals.edit', $professional) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+
+                                    <form action="{{ route('admin.users.demote', $professional->user) }}" method="POST" class="inline" onsubmit="return confirm('Demote {{ $professional->user->name }} ke user biasa? Profil professional akan dihapus.')">
+                                        @csrf
+                                        <button type="submit" class="text-orange-600 hover:text-orange-900">
+                                            ⬇️ Demote
+                                        </button>
+                                    </form>
+
                                     <form action="{{ route('admin.professionals.destroy', $professional) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?')">
                                         @csrf
                                         @method('DELETE')
