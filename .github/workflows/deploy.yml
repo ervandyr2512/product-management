@@ -45,10 +45,10 @@ jobs:
           debug: true
           script_stop: true
           script: |
-          cd ~/teman-bicara
-          git pull origin main
-          php artisan migrate --force
-          php artisan optimize:clear
+            cd ~/teman-bicara
+            git pull origin main
+            php artisan migrate --force
+            php artisan optimize:clear
 
             # Check if application directory exists
             if [ ! -d "${{ secrets.DEPLOY_PATH }}" ]; then
