@@ -19,10 +19,11 @@ class DashboardController extends Controller
         $totalAppointments = Appointment::count();
 
         // Calculate revenue from completed appointments only
+        // Use rate_60min as default pricing
         $totalRevenue = Appointment::where('status', 'completed')
             ->join('schedules', 'appointments.schedule_id', '=', 'schedules.id')
             ->join('professionals', 'schedules.professional_id', '=', 'professionals.id')
-            ->sum('professionals.price_per_session');
+            ->sum('professionals.rate_60min');
 
         // Recent data
         $recentAppointments = Appointment::with(['user', 'professional.user', 'schedule'])

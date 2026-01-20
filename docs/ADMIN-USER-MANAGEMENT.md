@@ -31,11 +31,9 @@ Super Admin sekarang dapat:
    - **Specialization**: Keahlian khusus (e.g., "Anxiety Disorders, Depression")
    - **License Number**: Nomor lisensi (optional)
    - **Years of Experience**: Lama pengalaman (tahun)
-   - **Education**: Riwayat pendidikan
-   - **Languages**: Bahasa yang dikuasai
    - **Bio**: Biografi professional
-   - **Price per Session**: Harga per sesi (IDR)
-   - **Session Duration**: Durasi sesi (menit)
+   - **Rate 30 Minutes**: Harga untuk sesi 30 menit (IDR)
+   - **Rate 60 Minutes**: Harga untuk sesi 60 menit (IDR)
 
 5. **Submit**
    - Klik **"✅ Promote to Professional"**
@@ -95,23 +93,25 @@ Super Admin sekarang dapat:
 
 ## Pricing Guidelines
 
+### Rate 30 Minutes
+
+| Type | Recommended Price Range |
+|------|------------------------|
+| Psychiatrist | Rp 200,000 - Rp 400,000 |
+| Psychologist | Rp 100,000 - Rp 250,000 |
+| Conversationalist | Rp 50,000 - Rp 100,000 |
+
+**Default:** Rp 100,000
+
+### Rate 60 Minutes
+
 | Type | Recommended Price Range |
 |------|------------------------|
 | Psychiatrist | Rp 300,000 - Rp 800,000 |
 | Psychologist | Rp 200,000 - Rp 500,000 |
-| Conversationalist | Rp 50,000 - Rp 200,000 |
+| Conversationalist | Rp 75,000 - Rp 200,000 |
 
 **Default:** Rp 150,000
-
----
-
-## Session Duration Options
-
-- **30 minutes** - Quick consultation
-- **45 minutes** - Standard session
-- **60 minutes** - Full session (Default)
-- **90 minutes** - Extended session
-- **120 minutes** - Deep therapy session
 
 ---
 

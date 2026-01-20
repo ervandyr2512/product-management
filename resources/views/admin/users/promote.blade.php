@@ -78,34 +78,6 @@
                         @enderror
                     </div>
 
-                    <!-- Education -->
-                    <div>
-                        <label for="education" class="block text-sm font-medium text-gray-700 mb-1">
-                            Education
-                        </label>
-                        <textarea id="education" name="education" rows="3"
-                            placeholder="e.g., S1 Psychology - University of Indonesia&#10;S2 Clinical Psychology - Gadjah Mada University"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500">{{ old('education') }}</textarea>
-                        <p class="mt-1 text-sm text-gray-500">Enter education background, one per line</p>
-                        @error('education')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
-                    <!-- Languages -->
-                    <div>
-                        <label for="languages" class="block text-sm font-medium text-gray-700 mb-1">
-                            Languages
-                        </label>
-                        <input type="text" id="languages" name="languages" value="{{ old('languages', 'Indonesian, English') }}"
-                            placeholder="e.g., Indonesian, English, Mandarin"
-                            class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                        <p class="mt-1 text-sm text-gray-500">Comma-separated list of languages</p>
-                        @error('languages')
-                            <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                        @enderror
-                    </div>
-
                     <!-- Bio -->
                     <div>
                         <label for="bio" class="block text-sm font-medium text-gray-700 mb-1">
@@ -122,38 +94,34 @@
                 </div>
             </div>
 
-            <!-- Pricing & Session Details -->
+            <!-- Pricing Details -->
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 space-y-6">
-                    <h3 class="text-lg font-semibold text-gray-900">Pricing & Session Details</h3>
+                    <h3 class="text-lg font-semibold text-gray-900">Pricing Details</h3>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Price per Session -->
+                        <!-- Rate 30 Minutes -->
                         <div>
-                            <label for="price_per_session" class="block text-sm font-medium text-gray-700 mb-1">
-                                Price per Session (IDR) <span class="text-red-500">*</span>
+                            <label for="rate_30min" class="block text-sm font-medium text-gray-700 mb-1">
+                                Rate 30 Minutes (IDR) <span class="text-red-500">*</span>
                             </label>
-                            <input type="number" id="price_per_session" name="price_per_session" value="{{ old('price_per_session', 150000) }}" required min="0" step="1000"
+                            <input type="number" id="rate_30min" name="rate_30min" value="{{ old('rate_30min', 100000) }}" required min="0" step="1000"
                                 class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                            <p class="mt-1 text-sm text-gray-500">Recommended: Rp 150,000 - Rp 500,000</p>
-                            @error('price_per_session')
+                            <p class="mt-1 text-sm text-gray-500">Recommended: Rp 75,000 - Rp 250,000</p>
+                            @error('rate_30min')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>
 
-                        <!-- Session Duration -->
+                        <!-- Rate 60 Minutes -->
                         <div>
-                            <label for="session_duration" class="block text-sm font-medium text-gray-700 mb-1">
-                                Session Duration (minutes) <span class="text-red-500">*</span>
+                            <label for="rate_60min" class="block text-sm font-medium text-gray-700 mb-1">
+                                Rate 60 Minutes (IDR) <span class="text-red-500">*</span>
                             </label>
-                            <select id="session_duration" name="session_duration" required class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                                <option value="30" {{ old('session_duration') == 30 ? 'selected' : '' }}>30 minutes</option>
-                                <option value="45" {{ old('session_duration') == 45 ? 'selected' : '' }}>45 minutes</option>
-                                <option value="60" {{ old('session_duration', 60) == 60 ? 'selected' : '' }}>60 minutes</option>
-                                <option value="90" {{ old('session_duration') == 90 ? 'selected' : '' }}>90 minutes</option>
-                                <option value="120" {{ old('session_duration') == 120 ? 'selected' : '' }}>120 minutes</option>
-                            </select>
-                            @error('session_duration')
+                            <input type="number" id="rate_60min" name="rate_60min" value="{{ old('rate_60min', 150000) }}" required min="0" step="1000"
+                                class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500">
+                            <p class="mt-1 text-sm text-gray-500">Recommended: Rp 150,000 - Rp 500,000</p>
+                            @error('rate_60min')
                                 <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                             @enderror
                         </div>

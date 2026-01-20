@@ -140,11 +140,9 @@ class UserController extends Controller
             'specialization' => 'required|string|max:255',
             'license_number' => 'nullable|string|max:100',
             'bio' => 'required|string',
-            'price_per_session' => 'required|numeric|min:0',
-            'session_duration' => 'required|integer|min:15',
+            'rate_30min' => 'required|numeric|min:0',
+            'rate_60min' => 'required|numeric|min:0',
             'experience_years' => 'required|integer|min:0',
-            'education' => 'nullable|string',
-            'languages' => 'nullable|string',
         ]);
 
         // Update user role
@@ -157,11 +155,9 @@ class UserController extends Controller
             'specialization' => $request->specialization,
             'license_number' => $request->license_number,
             'bio' => $request->bio,
-            'price_per_session' => $request->price_per_session,
-            'session_duration' => $request->session_duration,
+            'rate_30min' => $request->rate_30min,
+            'rate_60min' => $request->rate_60min,
             'experience_years' => $request->experience_years,
-            'education' => $request->education,
-            'languages' => $request->languages ?? 'Indonesian, English',
             'is_active' => true,
         ]);
 
