@@ -86,14 +86,30 @@
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                     {{ $user->created_at->format('d M Y') }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <a href="{{ route('admin.users.show', $user) }}" class="text-purple-600 hover:text-purple-900 mr-3">View</a>
-                                    <a href="{{ route('admin.users.edit', $user) }}" class="text-indigo-600 hover:text-indigo-900 mr-3">Edit</a>
-                                    <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
-                                    </form>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-3">
+                                    <a href="{{ route('admin.users.show', $user) }}" class="text-purple-600 hover:text-purple-900">View</a>
+                                    <a href="{{ route('admin.users.edit', $user) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+
+                                    @if($user->role === 'user')
+                                        <a href="{{ route('admin.users.promote-form', $user) }}" class="text-green-600 hover:text-green-900">
+                                            ⬆️ Promote
+                                        </a>
+                                    @elseif($user->role === 'professional')
+                                        <form action="{{ route('admin.users.demote', $user) }}" method="POST" class="inline" onsubmit="return confirm('Demote professional ke user biasa? Profil professional akan dihapus.')">
+                                            @csrf
+                                            <button type="submit" class="text-orange-600 hover:text-orange-900">
+                                                ⬇️ Demote
+                                            </button>
+                                        </form>
+                                    @endif
+
+                                    @if(!$user->isAdmin())
+                                        <form action="{{ route('admin.users.destroy', $user) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?')">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                        </form>
+                                    @endif
                                 </td>
                             </tr>
                         @empty

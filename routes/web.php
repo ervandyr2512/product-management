@@ -97,6 +97,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // User Management
     Route::resource('users', AdminUserController::class);
+    Route::get('/users/{user}/promote', [AdminUserController::class, 'promoteForm'])->name('users.promote-form');
+    Route::post('/users/{user}/promote', [AdminUserController::class, 'promote'])->name('users.promote');
+    Route::post('/users/{user}/demote', [AdminUserController::class, 'demote'])->name('users.demote');
 
     // Professional Management
     Route::resource('professionals', AdminProfessionalController::class)->except(['create', 'store']);

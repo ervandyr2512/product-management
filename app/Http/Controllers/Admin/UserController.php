@@ -106,4 +106,98 @@ class UserController extends Controller
         return redirect()->route('admin.users.index')
             ->with('success', 'User berhasil dihapus.');
     }
+
+    /**
+     * Show form to promote user to professional
+     */
+    public function promoteForm(User $user)
+    {
+        if ($user->isProfessional()) {
+            return redirect()->route('admin.users.index')
+                ->with('error', 'User sudah menjadi professional.');
+        }
+
+        if ($user->isAdmin()) {
+            return redirect()->route('admin.users.index')
+                ->with('error', 'Tidak dapat mempromote admin.');
+        }
+
+        return view('admin.users.promote', compact('user'));
+    }
+
+    /**
+     * Promote user to professional with profile setup
+     */
+    public function promote(Request $request, User $user)
+    {
+        if ($user->isProfessional()) {
+            return redirect()->route('admin.users.index')
+                ->with('error', 'User sudah menjadi professional.');
+        }
+
+        $request->validate([
+            'type' => 'required|in:psychiatrist,psychologist,conversationalist',
+            'specialization' => 'required|string|max:255',
+            'license_number' => 'nullable|string|max:100',
+            'bio' => 'required|string',
+            'price_per_session' => 'required|numeric|min:0',
+            'session_duration' => 'required|integer|min:15',
+            'experience_years' => 'required|integer|min:0',
+            'education' => 'nullable|string',
+            'languages' => 'nullable|string',
+        ]);
+
+        // Update user role
+        $user->role = 'professional';
+        $user->save();
+
+        // Create professional profile
+        $user->professional()->create([
+            'type' => $request->type,
+            'specialization' => $request->specialization,
+            'license_number' => $request->license_number,
+            'bio' => $request->bio,
+            'price_per_session' => $request->price_per_session,
+            'session_duration' => $request->session_duration,
+            'experience_years' => $request->experience_years,
+            'education' => $request->education,
+            'languages' => $request->languages ?? 'Indonesian, English',
+            'is_active' => true,
+        ]);
+
+        return redirect()->route('admin.users.index')
+            ->with('success', "User {$user->name} berhasil dipromote menjadi professional.");
+    }
+
+    /**
+     * Demote professional back to regular user
+     */
+    public function demote(User $user)
+    {
+        if (!$user->isProfessional()) {
+            return redirect()->route('admin.users.index')
+                ->with('error', 'User bukan professional.');
+        }
+
+        // Check if professional has active appointments
+        $hasActiveAppointments = $user->professional->appointments()
+            ->where('appointment_date', '>=', now())
+            ->where('status', '!=', 'cancelled')
+            ->exists();
+
+        if ($hasActiveAppointments) {
+            return redirect()->route('admin.users.index')
+                ->with('error', 'Tidak dapat demote professional yang masih memiliki appointment aktif.');
+        }
+
+        // Delete professional profile
+        $user->professional()->delete();
+
+        // Update user role
+        $user->role = 'user';
+        $user->save();
+
+        return redirect()->route('admin.users.index')
+            ->with('success', "Professional {$user->name} berhasil di-demote menjadi user biasa.");
+    }
 }
