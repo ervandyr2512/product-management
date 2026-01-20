@@ -11,7 +11,15 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::whereIn('role', ['user', 'professional']);
+        // Default: only show regular users (not professionals or admins)
+        $query = User::where('role', 'user');
+
+        // Allow filtering to show professionals if explicitly requested
+        if ($request->has('role') && $request->role === 'professional') {
+            $query = User::where('role', 'professional');
+        } elseif ($request->has('role') && $request->role === 'all') {
+            $query = User::whereIn('role', ['user', 'professional']);
+        }
 
         if ($request->has('search')) {
             $search = $request->search;
@@ -19,10 +27,6 @@ class UserController extends Controller
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%");
             });
-        }
-
-        if ($request->has('role') && $request->role !== '') {
-            $query->where('role', $request->role);
         }
 
         $users = $query->latest()->paginate(20);

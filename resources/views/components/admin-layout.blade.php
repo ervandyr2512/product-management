@@ -9,7 +9,8 @@
 
         <!-- Dark Mode Script (prevent flicker) -->
         <script>
-            if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            // Only apply dark mode if explicitly set by user
+            if (localStorage.getItem('theme') === 'dark') {
                 document.documentElement.classList.add('dark');
             } else {
                 document.documentElement.classList.remove('dark');

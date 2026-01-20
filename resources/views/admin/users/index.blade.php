@@ -24,9 +24,9 @@
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
                         <select name="role" class="w-full rounded-md border-gray-300 shadow-sm focus:border-purple-500 focus:ring-purple-500">
-                            <option value="">All Roles</option>
-                            <option value="user" {{ request('role') === 'user' ? 'selected' : '' }}>User</option>
-                            <option value="professional" {{ request('role') === 'professional' ? 'selected' : '' }}>Professional</option>
+                            <option value="" {{ request('role') === '' || request('role') === null ? 'selected' : '' }}>Users Only</option>
+                            <option value="professional" {{ request('role') === 'professional' ? 'selected' : '' }}>Professionals Only</option>
+                            <option value="all" {{ request('role') === 'all' ? 'selected' : '' }}>All (Users + Professionals)</option>
                         </select>
                     </div>
                     <div class="flex items-end">
