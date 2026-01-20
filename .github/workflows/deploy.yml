@@ -38,14 +38,22 @@ jobs:
       - name: Deploy to Hostinger
         uses: appleboy/ssh-action@v1.0.0
         with:
-          host: ${{ secrets.SSH_HOST }}
-          port: ${{ secrets.SSH_PORT }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          host: 82.29.191.90
+          port: 65002
+          username: u162866096
+          key: b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACBLCUEFXlXlJyVtDivB3lyVCr3vmfPsA1TGKVWAfn3iAgAAALB3PrjGdz64
+xgAAAAtzc2gtZWQyNTUxOQAAACBLCUEFXlXlJyVtDivB3lyVCr3vmfPsA1TGKVWAfn3iAg
+AAAEDSBUFEo0PULTlZXzQkh33LoxPsT7Yc28ln1qKjAKFglksJQQVeVeUnJW0OK8HeXJUK
+ve+Z8+wDVMYpVYB+feICAAAALGVydmFuZHlyYW5nZ2FuYXRhQEVydmFuZHlzLU1hY0Jvb2
+stQWlyLmxvY2FsAQ==
           debug: true
           script_stop: true
           script: |
-            echo "🚀 Starting deployment..."
+cd ~/teman-bicara
+git pull origin main
+php artisan migrate --force
+php artisan optimize:clear
 
             # Check if application directory exists
             if [ ! -d "${{ secrets.DEPLOY_PATH }}" ]; then
