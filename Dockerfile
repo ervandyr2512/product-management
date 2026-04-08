@@ -33,10 +33,10 @@ RUN npm run build
 # Laravel setup
 RUN php artisan storage:link || true
 
-EXPOSE 8080
+EXPOSE 10000
 
-CMD php artisan migrate --force && \
-    php artisan config:cache && \
-    php artisan route:cache && \
-    php artisan view:cache && \
-    php artisan serve --host=0.0.0.0 --port=8080
+CMD php artisan migrate --force \
+    && php artisan config:cache \
+    && php artisan route:cache \
+    && php artisan view:cache \
+    && php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
