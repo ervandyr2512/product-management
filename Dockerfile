@@ -17,12 +17,12 @@ RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
 WORKDIR /app
 
 # Copy composer files first for layer caching
-COPY composer.json composer.lock ./
+COPY composer.json ./
 RUN composer install --no-dev --optimize-autoloader --no-interaction --no-scripts
 
 # Copy package files
-COPY package.json package-lock.json ./
-RUN npm ci
+COPY package.json ./
+RUN npm install
 
 # Copy rest of app
 COPY . .
